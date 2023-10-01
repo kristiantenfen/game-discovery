@@ -1,4 +1,4 @@
-import { Game } from "@/types/game";
+import { Game, Screenshot } from "@/types/game";
 import { useEffect, useState } from "react";
 
 export const useList = (params: {
@@ -22,7 +22,7 @@ export const useList = (params: {
       })
       .catch((err) => setError(err))
       .finally(() => setIsLoading(false));
-  }, [params.search]);
+  }, [params]);
 
   return { data, meta, isLoading, error };
 };
@@ -45,7 +45,7 @@ export const useFindById = (id: string) => {
 };
 
 export const useScreenshotsById = (id: string) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<Screenshot[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState();
   const [meta, setMeta] = useState<object>();
@@ -53,6 +53,27 @@ export const useScreenshotsById = (id: string) => {
   useEffect(() => {
     setIsLoading(true);
     fetch(`/api/games/screenshots/${id}`)
+      .then((response) => response.json())
+      .then(({ results, previous, next, count }) => {
+        setData(results);
+        setMeta({ previous, next, count });
+      })
+      .catch((err) => setError(err))
+      .finally(() => setIsLoading(false));
+  }, [id]);
+
+  return { data, isLoading, error, meta };
+};
+
+export const useAdditionsById = (id: string) => {
+  const [data, setData] = useState<Screenshot[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState();
+  const [meta, setMeta] = useState<object>();
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetch(`/api/games/additions/${id}`)
       .then((response) => response.json())
       .then(({ results, previous, next, count }) => {
         setData(results);

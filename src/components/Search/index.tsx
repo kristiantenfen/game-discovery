@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 interface ISearch {
   onChange?: (keyword: string) => void;
@@ -8,6 +8,7 @@ interface ISearch {
 
 export default function Search({ onChange, onSubmit }: ISearch) {
   const [keyword, setKeyword] = useState("");
+  const inputRef = useRef(null);
 
   const handleOnChange = () => {
     if (typeof onChange === "function") onChange(keyword);
@@ -18,7 +19,10 @@ export default function Search({ onChange, onSubmit }: ISearch) {
 
   return (
     <input
-      className="rounded-md p-2 bg-slate-800 w-1/2"
+      data-testid="search-input"
+      ref={inputRef}
+      aria-label="Search"
+      className="rounded-md p-2 bg-gray-100 dark:bg-slate-800 w-1/2"
       onChange={(e) => {
         setKeyword(e.target.value);
         handleOnChange();

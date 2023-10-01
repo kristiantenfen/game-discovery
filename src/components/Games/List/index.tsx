@@ -6,7 +6,7 @@ interface IGameList {
 }
 export default function GamesList({ data }: IGameList) {
   return (
-    <div className="flex flex-wrap gap-4">
+    <div className="gap-4 grid grid-cols-5" data-testid="game-list-component">
       {data.map((game) => (
         <GameCard key={game.id} game={game} />
       ))}
